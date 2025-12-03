@@ -206,3 +206,38 @@ function actualizarCestaVisual() {
         }).join('');
     }
 }
+
+// ================================================================
+// 7. ESCENA 3: JUGADOR EQUIPADO
+// ================================================================
+
+/**
+ * Muestra el estado del jugador tras equiparse con los objetos comprados.
+ * Calcula y renderiza las nuevas estadísticas totales (Vida, Ataque, Defensa).
+ */
+function cargarJugadorEquipado() {
+    mostrarEscena('escena-jugador-equipado');
+    const container = document.getElementById('tarjeta-jugador-equipado');
+
+    // Generar HTML de los iconos del inventario
+    const htmlInventario = jugador.inventario.map(item => {
+        const img = obtenerImagenProducto(item.nombre);
+        return `<img src="${img}" style="width:40px; height:40px; margin:2px; border:1px solid #333; border-radius:4px;">`;
+    }).join('');
+
+    container.innerHTML = `
+        <img src="./imagenes/caballero.png" alt="Jugador">
+        <h3>${jugador.nombre} (Listo para pelear)</h3>
+        <p>❤️ Vida: ${jugador.vida}</p>
+        <p>⚔️ Ataque Total: ${jugador.ataqueTotal}</p>
+        <p>🛡️ Defensa Total: ${jugador.defensaTotal}</p>
+        <p>🎒 Items en mochila: ${jugador.inventario.length}</p>
+        
+        <div style="margin-top:10px; padding:5px; background:#f0f0f0;">
+            <p><strong>Inventario:</strong></p>
+            <div>${htmlInventario || '<small>Vacío</small>'}</div>
+        </div>
+    `;
+
+    document.getElementById('btn-ver-enemigos').onclick = () => cargarListaEnemigos();
+}
