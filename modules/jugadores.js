@@ -1,10 +1,39 @@
 import { groupBy } from '../utils/utils.js';
 
+/**
+ * Clase que representa al jugador principal del juego.
+ * Gestiona sus estadísticas vitales, su inventario de objetos y su puntuación acumulada.
+ * @class
+ */
 export class Jugador {
+  /**
+   * Nombre identificativo del jugador.
+   * @type {string}
+   */
   nombre;
+
+  /**
+   * Puntuación actual acumulada en el juego.
+   * @type {number}
+   */
   puntos;
+
+  /**
+   * Lista de objetos (armas, armaduras, pociones) que posee el jugador.
+   * @type {Array<Object>}
+   */
   inventario;
+
+  /**
+   * Puntos de vida máximos que puede tener el jugador.
+   * @type {number}
+   */
   vidaMax;
+
+  /**
+   * Puntos de vida actuales del jugador.
+   * @type {number}
+   */
   vida;
 
   /**
@@ -21,7 +50,7 @@ export class Jugador {
 
   /**
    * Añade un objeto al inventario del jugador.
-   * Se utiliza `structuredClone` para evitar modificar el objeto original.
+   * Se utiliza `structuredClone` para crear una copia profunda y evitar referencias al objeto original del mercado.
    * @param {Object} item - Objeto que se añadirá al inventario.
    */
   añadirItem(item) {
@@ -29,7 +58,7 @@ export class Jugador {
   }
 
   /**
-   * Incrementa los puntos del jugador.
+   * Incrementa la puntuación del jugador tras una victoria.
    * @param {number} cantidad - Cantidad de puntos a añadir.
    */
   ganarPuntos(cantidad) {
@@ -37,7 +66,7 @@ export class Jugador {
   }
 
   /**
-   * Calcula el total de ataque del jugador basado en los bonus de sus ítems.
+   * Calcula el ataque total sumando los bonus de tipo 'ataque' de todos los objetos del inventario.
    * @returns {number} Puntos de ataque totales.
    */
   get ataqueTotal() {
@@ -45,7 +74,7 @@ export class Jugador {
   }
 
   /**
-   * Calcula el total de defensa del jugador basado en los bonus de sus ítems.
+   * Calcula la defensa total sumando los bonus de tipo 'defensa' de todos los objetos del inventario.
    * @returns {number} Puntos de defensa totales.
    */
   get defensaTotal() {
@@ -53,7 +82,8 @@ export class Jugador {
   }
 
   /**
-   * Agrupa los ítems del inventario por tipo.
+   * Agrupa los ítems del inventario según su propiedad 'tipo' (ej: arma, armadura, poción).
+   * Utiliza la función auxiliar groupBy.
    * @returns {Object} Un objeto con listas de objetos agrupados por tipo.
    */
   inventarioPorTipo() {
@@ -61,8 +91,8 @@ export class Jugador {
   }
 
   /**
-   * Devuelve una presentación detallada del jugador.
-   * @returns {Object} Descripción formateada del jugador.
+   * Genera una representación en texto formateado del estado actual del jugador.
+   * @returns {string} Descripción detallada con estadísticas e inventario.
    */
   mostrarJugador() {
     return `
@@ -76,5 +106,4 @@ export class Jugador {
           : 'Vacío'}
     `;
   }
-
 }
