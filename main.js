@@ -15,6 +15,8 @@ import { Jugador } from './modules/jugadores.js';
 /** Importa la función de descuentos desde el módulo de mercado. */
 import { aplicarDescuentoPorRareza } from './modules/mercado.js';
 
+/** Importa las clases Enemigo y JefeFinal desde el módulo de enemigos. */
+import { Enemigo, JefeFinal } from './modules/enemigos.js';
 
 
 // ================================================================
@@ -30,6 +32,11 @@ let jugador;
  * @description Array que almacena temporalmente los productos seleccionados en el mercado antes de comprar.
  */
 let cesta = [];
+
+/** * @type {Array<Enemigo>} 
+ * @description Lista de enemigos contra los que se luchará secuencialmente.
+ */
+let enemigos = [];
 
 // ================================================================
 // 3. FUNCIONES DE UTILIDAD Y CONFIGURACIÓN
@@ -87,6 +94,20 @@ function mostrarEscena(idEscena) {
 window.onload = () => {
     // Inicialización del Jugador
     jugador = new Jugador("Diego"); 
+
+
+// Inicialización de Enemigos
+    enemigos = [
+        new Enemigo("Troll", 10, 50),       
+        new Enemigo("Minotauro", 15, 80),
+        new JefeFinal("Mago", 30, 200, "Trueno", 1.5) 
+    ];
+
+    // Asignación de imágenes a los enemigos
+    const imagenesEnemigos = ['./imagenes/troll.png', './imagenes/minotauro.png', './imagenes/mago.png'];
+    enemigos.forEach((enemigo, indice) => {
+        enemigo.img = imagenesEnemigos[indice] || './imagenes/troll.png';
+    });    
 
     
     cargarEscenaJugador();
@@ -240,4 +261,35 @@ function cargarJugadorEquipado() {
     `;
 
     document.getElementById('btn-ver-enemigos').onclick = () => cargarListaEnemigos();
+}
+
+// ================================================================
+// 8. ESCENA 4: LISTA DE ENEMIGOS
+// ================================================================
+
+/**
+ * Muestra una lista de todos los enemigos a los que se enfrentará el jugador.
+ * Permite visualizar sus estadísticas antes de combatir.
+ */
+function cargarListaEnemigos() {
+    mostrarEscena('escena-lista-enemigos');
+    const grid = document.getElementById('grid-enemigos');
+    grid.innerHTML = '';
+
+    enemigos.forEach(enemigo => {
+        const div = document.createElement('div');
+        div.className = 'tarjeta-item';
+        div.innerHTML = `
+            <img src="${enemigo.img}">
+            <h4>${enemigo.nombre}</h4>
+            <p>Ataque: ${enemigo.ataque}</p>
+            <p>Vida: ${enemigo.vida}</p>
+        `;
+        grid.appendChild(div);
+    });
+
+    document.getElementById('btn-iniciar-batalla').onclick = () => {
+        indiceBatallaActual = 0; // Reiniciar índice para empezar desde el primero
+        prepararBatalla();
+    };
 }
