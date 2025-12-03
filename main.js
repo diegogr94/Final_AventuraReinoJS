@@ -18,6 +18,9 @@ import { aplicarDescuentoPorRareza } from './modules/mercado.js';
 /** Importa las clases Enemigo y JefeFinal desde el módulo de enemigos. */
 import { Enemigo, JefeFinal } from './modules/enemigos.js';
 
+/** Importa la lógica de combate desde el módulo de ranking. */
+import { batalla } from './modules/ranking.js';
+
 
 // ================================================================
 // 2. VARIABLES GLOBALES (ESTADO DEL JUEGO)
@@ -37,6 +40,11 @@ let cesta = [];
  * @description Lista de enemigos contra los que se luchará secuencialmente.
  */
 let enemigos = [];
+
+/** * @type {number} 
+ * @description Índice que rastrea el progreso en la lista de enemigos (0 para el primero, 1 para el segundo, etc.).
+ */
+let indiceBatallaActual = 0;
 
 // ================================================================
 // 3. FUNCIONES DE UTILIDAD Y CONFIGURACIÓN
@@ -391,4 +399,32 @@ function prepararBatalla() {
         }
 
     }, 1500); 
+}
+
+// ================================================================
+// ESCENA 6: FINAL DEL JUEGO
+// ================================================================
+
+/**
+ * Muestra la pantalla final con la puntuación y el rango obtenido.
+ * Lanza efectos de celebración si el jugador ganó.
+ */
+function finJuego() {
+    mostrarEscena('escena-final');
+    const container = document.getElementById('contenido-final');
+    
+    // Determinar rango (Veterano/Novato)
+    const esPro = jugador.puntos > 300; 
+
+    container.innerHTML = `
+        <h2 style="color:${esPro ? 'gold' : 'silver'}">¡Juego Terminado!</h2>
+        <img src="./imagenes/caballero.png" style="width:150px;">
+        <h3>Rango: ${esPro ? "Veterano (PRO)" : "Novato (Rookie)"}</h3>
+        <p style="font-size:1.5rem">Puntuación Final: <strong>${jugador.puntos}</strong></p>
+    `;
+
+    // Efecto de Confetti
+    if (jugador.vida > 0 && typeof confetti !== 'undefined') {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
 }
