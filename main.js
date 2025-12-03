@@ -114,7 +114,7 @@ window.onload = () => {
 };
 
 // ================================================================
-// 5. ESCENA 1: DATOS INICIALES DEL JUGADOR
+// ESCENA 1: DATOS INICIALES DEL JUGADOR
 // ================================================================
 
 /**
@@ -141,7 +141,7 @@ function cargarEscenaJugador() {
 
 
 // ================================================================
-// 6. ESCENA 2: MERCADO
+// ESCENA 2: MERCADO
 // ================================================================
 
 /**
@@ -229,7 +229,7 @@ function actualizarCestaVisual() {
 }
 
 // ================================================================
-// 7. ESCENA 3: JUGADOR EQUIPADO
+// ESCENA 3: JUGADOR EQUIPADO
 // ================================================================
 
 /**
@@ -264,7 +264,7 @@ function cargarJugadorEquipado() {
 }
 
 // ================================================================
-// 8. ESCENA 4: LISTA DE ENEMIGOS
+// ESCENA 4: LISTA DE ENEMIGOS
 // ================================================================
 
 /**
@@ -292,4 +292,103 @@ function cargarListaEnemigos() {
         indiceBatallaActual = 0; // Reiniciar índice para empezar desde el primero
         prepararBatalla();
     };
+}
+
+
+// ================================================================
+// ESCENA 5: BATALLA
+// ================================================================
+
+/**
+ * Gestiona la lógica y visualización de un combate individual.
+ * Controla las animaciones, la llamada al cálculo de batalla y el flujo (victoria/derrota).
+ * Es una función recursiva si el jugador gana y quedan enemigos.
+ */
+function prepararBatalla() {
+    mostrarEscena('escena-batalla');
+    
+    // Verificar si quedan enemigos
+    if (indiceBatallaActual >= enemigos.length) {
+        finJuego(); 
+        return;
+    }
+
+    // Datos del combate actual
+    const enemigo = enemigos[indiceBatallaActual]; 
+    const divJugador = document.getElementById('tarjeta-jugador-batalla');
+    const divEnemigo = document.getElementById('tarjeta-enemigo-batalla');
+    const logBatalla = document.getElementById('registro-batalla');
+    const btnSiguiente = document.getElementById('btn-siguiente-batalla');
+
+    // Renderizado inicial de combatientes
+    divJugador.innerHTML = `
+        <img src="./imagenes/caballero.png" alt="Jugador">
+        <h4>${jugador.nombre}</h4>
+        <p>❤️ HP: ${jugador.vida}</p>
+        <p>⚔️ ATK: ${jugador.ataqueTotal}</p>
+    `;
+
+    divEnemigo.innerHTML = `
+        <img src="${enemigo.img}" alt="Enemigo">
+        <h4>${enemigo.nombre}</h4>
+        <p>❤️ HP: ${enemigo.vida}</p>
+        <p>⚔️ ATK: ${enemigo.ataque}</p>
+    `;
+
+    // Animación con GSAP
+    if (typeof gsap !== 'undefined') {
+        gsap.from(divJugador, { x: -300, opacity: 0, duration: 1, ease: "power2.out" });
+        gsap.from(divEnemigo, { x: 300, opacity: 0, duration: 1, ease: "power2.out" });
+    }
+
+    // Estado inicial de la UI de batalla
+    logBatalla.innerHTML = "⚔️ ¡Peleando!..."; 
+    logBatalla.style.color = "black";
+    btnSiguiente.classList.add('oculto'); 
+
+    // Simulación de tiempo de combate
+    setTimeout(() => {
+        
+        // Ejecución de la lógica de combate
+        const resultado = batalla(jugador, enemigo); 
+        
+        // Actualización de la UI tras el combate
+        divJugador.querySelector('p').innerText = `❤️ HP: ${jugador.vida}`;
+
+        logBatalla.innerHTML = `
+            <p>Resultado: <span style="font-weight:bold">${resultado.ganador} gana el combate.</span></p>
+            <p>Puntos obtenidos: <span style="color:blue">+${resultado.puntosGanados}</span></p>
+        `;
+
+        btnSiguiente.classList.remove('oculto'); 
+
+        if (jugador.vida > 0) {
+            // VICTORIA DEL JUGADOR
+            logBatalla.style.color = "green";
+
+            if (indiceBatallaActual < enemigos.length - 1) {
+                // Siguiente enemigo
+                btnSiguiente.innerText = "Siguiente Enemigo ➡️";
+                btnSiguiente.onclick = () => {
+                    indiceBatallaActual++; 
+                    prepararBatalla(); 
+                };
+            } else {
+                // Fin de todos los combates
+                btnSiguiente.innerText = "Ver Resultados Finales 🏆";
+                btnSiguiente.onclick = () => {
+                    finJuego();
+                };
+            }
+
+        } else {
+            // DERROTA DEL JUGADOR
+            divJugador.style.opacity = "0.5"; 
+            logBatalla.innerHTML = "<strong style='color:red'>Has sido derrotado... ☠️</strong>";
+            
+            btnSiguiente.innerText = "Reiniciar Juego 🔄";
+            btnSiguiente.onclick = () => location.reload();
+        }
+
+    }, 1500); 
 }

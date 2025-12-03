@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura en el Reino JS</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+
+    <div class="contenedor-juego">
+        <h1>⚔️ Aventura en el Reino JS ⚔️</h1>
+
+        <!-- ESCENA 1: INICIO JUGADOR -->
+        <section id="escena-jugador" class="escena activa">
+            <h2>Tu Personaje</h2>
+            <div id="tarjeta-jugador-inicial" class="tarjeta-centro">
+                <!-- Se rellena con JS -->
+                <p>Cargando datos del héroe...</p>
+            </div>
+            <button id="btn-ir-mercado" class="btn-primario">Ir al Mercado</button>
+        </section>
+
+        <!-- ESCENA 2: MERCADO -->
+        <section id="escena-mercado" class="escena">
+            <h2>Mercado Negro</h2>
+            <p class="subtitulo">¡Equípate antes de morir!</p>
+            
+            <div id="grid-mercado" class="contenedor-grid">
+                <!-- Productos aquí -->
+            </div>
+
+            <div class="barra-inventario">
+                <span>Cesta:</span>
+                <div id="cesta-mercado" class="huecos-cesta"></div>
+            </div>
+
+            <button id="btn-comprar" class="btn-primario">Comprar y Continuar</button>
+        </section>
+
+        <!-- ESCENA 3: JUGADOR EQUIPADO -->
+        <section id="escena-jugador-equipado" class="escena">
+            <h2>Personaje Equipado</h2>
+            <div id="tarjeta-jugador-equipado" class="tarjeta-centro">
+                <!-- Se rellena con JS -->
+            </div>
+            <button id="btn-ver-enemigos" class="btn-primario">Ver Enemigos</button>
+        </section>
+
+        <!-- ESCENA 4: LISTA DE ENEMIGOS -->
+        <section id="escena-lista-enemigos" class="escena">
+            <h2>Tus Oponentes</h2>
+            <div id="grid-enemigos" class="contenedor-grid">
+                <!-- Enemigos aquí -->
+            </div>
+            <button id="btn-iniciar-batalla" class="btn-primario">¡A Luchar!</button>
+        </section>
+
+        <!-- ESCENA 5: BATALLA -->
+        <section id="escena-batalla" class="escena">
+            <h2>Campo de Batalla</h2>
+            
+            <div class="arena-batalla">
+                <!-- Tarjeta Jugador (Izquierda) -->
+                <div id="tarjeta-jugador-batalla" class="tarjeta-luchador"></div>
+                
+                <div class="texto-vs">VS</div>
+                
+                <!-- Tarjeta Enemigo (Derecha) -->
+                <div id="tarjeta-enemigo-batalla" class="tarjeta-luchador"></div>
+            </div>
+
+            <div id="registro-batalla" class="caja-registro"></div>
+            
+            <button id="btn-siguiente-batalla" class="btn-primario oculto">Siguiente Batalla</button>
+        </section>
+
+        
+
+</body>
+</html>
