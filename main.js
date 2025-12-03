@@ -394,8 +394,10 @@ function prepararBatalla() {
             divJugador.style.opacity = "0.5"; 
             logBatalla.innerHTML = "<strong style='color:red'>Has sido derrotado... ☠️</strong>";
             
-            btnSiguiente.innerText = "Reiniciar Juego 🔄";
-            btnSiguiente.onclick = () => location.reload();
+            btnSiguiente.innerText = "Ver Resultado Final 💀";
+            btnSiguiente.onclick = () => {
+                finJuego(); 
+            };
         }
 
     }, 1500); 
