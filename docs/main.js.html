@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file main.js
  * @description Script principal del juego "Aventura en el Reino JS". Gestiona el flujo de escenas, la lógica del mercado, el inventario y el sistema de combate.
  * @author Tu Nombre
@@ -31,12 +59,12 @@ import { batalla } from './modules/ranking.js';
  */
 let jugador;
 
-/** * @type {Array<Object>} 
+/** * @type {Array&lt;Object>} 
  * @description Array que almacena temporalmente los productos seleccionados en el mercado antes de comprar.
  */
 let cesta = [];
 
-/** * @type {Array<Enemigo>} 
+/** * @type {Array&lt;Enemigo>} 
  * @description Lista de enemigos contra los que se luchará secuencialmente.
  */
 let enemigos = [];
@@ -56,10 +84,8 @@ let indiceBatallaActual = 0;
  * @returns {string} Ruta relativa de la imagen. Devuelve una imagen por defecto si no encuentra coincidencia.
  */
 function obtenerImagenProducto(nombre) {
-    /** * Mapa de nombres de items a rutas de archivos 
- * @type {Object<string, string>} 
- */
-const mapaImagenes = {
+    /** @type {Object&lt;string, string>} Mapa de nombres de items a rutas de archivos */
+    const mapaImagenes = {
         'Espada corta':       './imagenes/espadaCorta.jpg',
         'Arco de caza':       './imagenes/arcoCaza.jpg',
         'Armadura de cuero':  './imagenes/armaduraCuero.jpg',
@@ -137,12 +163,12 @@ function cargarEscenaJugador() {
     
     // Inyectar HTML con datos del jugador
     container.innerHTML = `
-        <img src="./imagenes/caballero.png" alt="Jugador">
-        <h3>${jugador.nombre}</h3>
-        <p>❤️ Vida: ${jugador.vida}</p>
-        <p>⚔️ Ataque Base: 0</p>
-        <p>🛡️ Defensa Base: 0</p>
-        <p>💰 Puntos: ${jugador.puntos}</p>
+        &lt;img src="./imagenes/caballero.png" alt="Jugador">
+        &lt;h3>${jugador.nombre}&lt;/h3>
+        &lt;p>❤️ Vida: ${jugador.vida}&lt;/p>
+        &lt;p>⚔️ Ataque Base: 0&lt;/p>
+        &lt;p>🛡️ Defensa Base: 0&lt;/p>
+        &lt;p>💰 Puntos: ${jugador.puntos}&lt;/p>
     `;
 
     // Configurar botón para avanzar
@@ -187,10 +213,10 @@ function cargarMercado() {
         const imagen = obtenerImagenProducto(producto.nombre);
 
         div.innerHTML = `
-            <img src="${imagen}">
-            <h4>${producto.nombre}</h4>
-            <p style="font-size:0.8em">${producto.mostrarProducto()}</p>
-            <button class="btn-pequeno">${cesta.includes(producto) ? 'Retirar' : 'Añadir'}</button>
+            &lt;img src="${imagen}">
+            &lt;h4>${producto.nombre}&lt;/h4>
+            &lt;p style="font-size:0.8em">${producto.mostrarProducto()}&lt;/p>
+            &lt;button class="btn-pequeno">${cesta.includes(producto) ? 'Retirar' : 'Añadir'}&lt;/button>
         `;
 
         // Evento Click: Añadir/Quitar de la cesta
@@ -228,12 +254,12 @@ function actualizarCestaVisual() {
     const cajaCesta = document.getElementById('cesta-mercado');
     
     if(cesta.length === 0) {
-        cajaCesta.innerHTML = "<em>Vacía</em>";
+        cajaCesta.innerHTML = "&lt;em>Vacía&lt;/em>";
     } else {
         // Mapear productos seleccionados a imágenes pequeñas
         cajaCesta.innerHTML = cesta.map(p => {
             const img = obtenerImagenProducto(p.nombre);
-            return `<img src="${img}" style="width:30px; height:30px; margin:2px;" title="${p.nombre}">`;
+            return `&lt;img src="${img}" style="width:30px; height:30px; margin:2px;" title="${p.nombre}">`;
         }).join('');
     }
 }
@@ -253,21 +279,21 @@ function cargarJugadorEquipado() {
     // Generar HTML de los iconos del inventario
     const htmlInventario = jugador.inventario.map(item => {
         const img = obtenerImagenProducto(item.nombre);
-        return `<img src="${img}" style="width:40px; height:40px; margin:2px; border:1px solid #333; border-radius:4px;">`;
+        return `&lt;img src="${img}" style="width:40px; height:40px; margin:2px; border:1px solid #333; border-radius:4px;">`;
     }).join('');
 
     container.innerHTML = `
-        <img src="./imagenes/caballero.png" alt="Jugador">
-        <h3>${jugador.nombre} (Listo para pelear)</h3>
-        <p>❤️ Vida: ${jugador.vida}</p>
-        <p>⚔️ Ataque Total: ${jugador.ataqueTotal}</p>
-        <p>🛡️ Defensa Total: ${jugador.defensaTotal}</p>
-        <p>🎒 Items en mochila: ${jugador.inventario.length}</p>
+        &lt;img src="./imagenes/caballero.png" alt="Jugador">
+        &lt;h3>${jugador.nombre} (Listo para pelear)&lt;/h3>
+        &lt;p>❤️ Vida: ${jugador.vida}&lt;/p>
+        &lt;p>⚔️ Ataque Total: ${jugador.ataqueTotal}&lt;/p>
+        &lt;p>🛡️ Defensa Total: ${jugador.defensaTotal}&lt;/p>
+        &lt;p>🎒 Items en mochila: ${jugador.inventario.length}&lt;/p>
         
-        <div style="margin-top:10px; padding:5px; background:#f0f0f0;">
-            <p><strong>Inventario:</strong></p>
-            <div>${htmlInventario || '<small>Vacío</small>'}</div>
-        </div>
+        &lt;div style="margin-top:10px; padding:5px; background:#f0f0f0;">
+            &lt;p>&lt;strong>Inventario:&lt;/strong>&lt;/p>
+            &lt;div>${htmlInventario || '&lt;small>Vacío&lt;/small>'}&lt;/div>
+        &lt;/div>
     `;
 
     document.getElementById('btn-ver-enemigos').onclick = () => cargarListaEnemigos();
@@ -290,10 +316,10 @@ function cargarListaEnemigos() {
         const div = document.createElement('div');
         div.className = 'tarjeta-item';
         div.innerHTML = `
-            <img src="${enemigo.img}">
-            <h4>${enemigo.nombre}</h4>
-            <p>Ataque: ${enemigo.ataque}</p>
-            <p>Vida: ${enemigo.vida}</p>
+            &lt;img src="${enemigo.img}">
+            &lt;h4>${enemigo.nombre}&lt;/h4>
+            &lt;p>Ataque: ${enemigo.ataque}&lt;/p>
+            &lt;p>Vida: ${enemigo.vida}&lt;/p>
         `;
         grid.appendChild(div);
     });
@@ -341,19 +367,19 @@ function prepararBatalla() {
 
     // Renderizado inicial de combatientes
     divJugador.innerHTML = `
-        <img src="./imagenes/caballero.png" alt="Jugador">
-        <h4>${jugador.nombre}</h4>
-        <p>❤️ HP: ${jugador.vida}</p>
-        <p>⚔️ ATK: ${jugador.ataqueTotal}</p>
+        &lt;img src="./imagenes/caballero.png" alt="Jugador">
+        &lt;h4>${jugador.nombre}&lt;/h4>
+        &lt;p>❤️ HP: ${jugador.vida}&lt;/p>
+        &lt;p>⚔️ ATK: ${jugador.ataqueTotal}&lt;/p>
     `;
     // Asignamos la clase necesaria para que el CSS la mueva
     divJugador.className = 'tarjeta-luchador lado-jugador';
 
     divEnemigo.innerHTML = `
-        <img src="${enemigo.img}" alt="Enemigo">
-        <h4>${enemigo.nombre}</h4>
-        <p>❤️ HP: ${enemigo.vida}</p>
-        <p>⚔️ ATK: ${enemigo.ataque}</p>
+        &lt;img src="${enemigo.img}" alt="Enemigo">
+        &lt;h4>${enemigo.nombre}&lt;/h4>
+        &lt;p>❤️ HP: ${enemigo.vida}&lt;/p>
+        &lt;p>⚔️ ATK: ${enemigo.ataque}&lt;/p>
     `;
 
     // Asignamos la clase necesaria para que el CSS la mueva
@@ -379,8 +405,8 @@ function prepararBatalla() {
         divJugador.querySelector('p').innerText = `❤️ HP: ${jugador.vida}`;
 
         logBatalla.innerHTML = `
-            <p>Resultado: <span style="font-weight:bold">${resultado.ganador} gana el combate.</span></p>
-            <p>Puntos obtenidos: <span style="color:blue">+${resultado.puntosGanados}</span></p>
+            &lt;p>Resultado: &lt;span style="font-weight:bold">${resultado.ganador} gana el combate.&lt;/span>&lt;/p>
+            &lt;p>Puntos obtenidos: &lt;span style="color:blue">+${resultado.puntosGanados}&lt;/span>&lt;/p>
         `;
 
         btnSiguiente.classList.remove('oculto'); 
@@ -389,7 +415,7 @@ function prepararBatalla() {
             // VICTORIA DEL JUGADOR
             logBatalla.style.color = "green";
 
-            if (indiceBatallaActual < enemigos.length - 1) {
+            if (indiceBatallaActual &lt; enemigos.length - 1) {
                 // Siguiente enemigo
                 btnSiguiente.innerText = "Siguiente Enemigo ➡️";
                 btnSiguiente.onclick = () => {
@@ -407,7 +433,7 @@ function prepararBatalla() {
         } else {
             // DERROTA DEL JUGADOR
             divJugador.style.opacity = "0.5"; 
-            logBatalla.innerHTML = "<strong style='color:red'>Has sido derrotado... ☠️</strong>";
+            logBatalla.innerHTML = "&lt;strong style='color:red'>Has sido derrotado... ☠️&lt;/strong>";
             
             btnSiguiente.innerText = "Ver Resultado Final 💀";
             btnSiguiente.onclick = () => {
@@ -434,14 +460,37 @@ function finJuego() {
     const esPro = jugador.puntos > 300; 
 
     container.innerHTML = `
-        <h2 style="color:${esPro ? 'gold' : 'silver'}">¡Juego Terminado!</h2>
-        <img src="./imagenes/caballero.png" style="width:150px;">
-        <h3>Rango: ${esPro ? "Veterano (PRO)" : "Novato (Rookie)"}</h3>
-        <p style="font-size:1.5rem">Puntuación Final: <strong>${jugador.puntos}</strong></p>
+        &lt;h2 style="color:${esPro ? 'gold' : 'silver'}">¡Juego Terminado!&lt;/h2>
+        &lt;img src="./imagenes/caballero.png" style="width:150px;">
+        &lt;h3>Rango: ${esPro ? "Veterano (PRO)" : "Novato (Rookie)"}&lt;/h3>
+        &lt;p style="font-size:1.5rem">Puntuación Final: &lt;strong>${jugador.puntos}&lt;/strong>&lt;/p>
     `;
 
     // Efecto de Confetti
-    if (jugador.vida > 0 && typeof confetti !== 'undefined') {
+    if (jugador.vida > 0 &amp;&amp; typeof confetti !== 'undefined') {
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Enemigo.html">Enemigo</a></li><li><a href="JefeFinal.html">JefeFinal</a></li><li><a href="Jugador.html">Jugador</a></li><li><a href="Producto.html">Producto</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EUR">EUR</a></li><li><a href="global.html#actualizarCestaVisual">actualizarCestaVisual</a></li><li><a href="global.html#agruparPorNivel">agruparPorNivel</a></li><li><a href="global.html#aplicarDescuentoPorRareza">aplicarDescuentoPorRareza</a></li><li><a href="global.html#batalla">batalla</a></li><li><a href="global.html#buscarProducto">buscarProducto</a></li><li><a href="global.html#cargarEscenaJugador">cargarEscenaJugador</a></li><li><a href="global.html#cargarJugadorEquipado">cargarJugadorEquipado</a></li><li><a href="global.html#cargarListaEnemigos">cargarListaEnemigos</a></li><li><a href="global.html#cargarMercado">cargarMercado</a></li><li><a href="global.html#cesta">cesta</a></li><li><a href="global.html#describirProducto">describirProducto</a></li><li><a href="global.html#enemigos">enemigos</a></li><li><a href="global.html#filtrarPorRareza">filtrarPorRareza</a></li><li><a href="global.html#finJuego">finJuego</a></li><li><a href="global.html#groupBy">groupBy</a></li><li><a href="global.html#indiceBatallaActual">indiceBatallaActual</a></li><li><a href="global.html#jugador">jugador</a></li><li><a href="global.html#mercado">mercado</a></li><li><a href="global.html#mostrarEscena">mostrarEscena</a></li><li><a href="global.html#mostrarRanking">mostrarRanking</a></li><li><a href="global.html#obtenerImagenProducto">obtenerImagenProducto</a></li><li><a href="global.html#prepararBatalla">prepararBatalla</a></li><li><a href="global.html#showScene">showScene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 03 2025 20:07:26 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

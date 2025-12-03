@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/ranking.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/ranking.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file ranking.js
+ * @description Módulo encargado de la lógica de combate y gestión de rankings.
+ * Contiene las funciones para calcular el resultado de las batallas y ordenar a los jugadores.
+ */
+
+import { groupBy } from '../utils/utils.js';
+
+/**
+ * Simula una batalla por turnos entre un jugador y un enemigo.
+ * Calcula el daño recibido por ambas partes basándose en ataque y defensa.
+ * * @param {Jugador} jugador - La instancia del jugador que combate.
+ * @param {Enemigo} enemigo - La instancia del enemigo o jefe.
+ * @returns {Object} Objeto con el resultado: { ganador: string, puntosGanados: number }.
+ */
+export function batalla(jugador, enemigo) {
+  // Copias locales para no mutar el estado hasta el final
+  let vidaJugador = jugador.vida;
+  let vidaEnemigo = enemigo.vida;
+
+  // Calculamos daño efectivo (asegurando que sea al menos 1 para evitar curaciones)
+  const dmgJugador = jugador.ataqueTotal;
+  const dmgEnemigo = Math.max(1, enemigo.ataque - jugador.defensaTotal);
+
+  // Bucle de combate: se atacan hasta que uno llegue a 0
+  while (vidaJugador > 0 &amp;&amp; vidaEnemigo > 0) {
+    vidaEnemigo -= dmgJugador;
+    if (vidaEnemigo &lt;= 0) break; // Si el enemigo cae, no contraataca
+    vidaJugador -= dmgEnemigo;
+  }
+
+  // Comprobar resultado
+  const ganoJugador = vidaJugador > 0;
+  let puntosGanados = 0;
+
+  if (ganoJugador) {
+    // 1. Calcular puntos base
+    const base = 100 + enemigo.ataque;
+    
+    // 2. Aplicar multiplicador si es Jefe
+    const multiplicador = enemigo.tipo === 'jefe'
+      ? (enemigo.multiplicador ?? 1.5)
+      : 1;
+      
+    puntosGanados = Math.round(base * multiplicador);
+    
+    // 3. Sumar puntos y actualizar vida del jugador
+    jugador.ganarPuntos(puntosGanados);
+    jugador.vida = vidaJugador; 
+  } else {
+    // Si pierde, forzamos la vida a 0 para que el juego detecte el fin
+    jugador.vida = 0;
+  }
+
+  return {
+    ganador: ganoJugador ? jugador.nombre : enemigo.nombre,
+    puntosGanados,
+  };
+}
+
+/**
+ * Agrupa una lista de jugadores en categorías según su puntuación.
+ * Utiliza un umbral para determinar si son "pro" o "rookie".
+ *
+ * @param {Array&lt;Jugador>} jugadores - Lista de objetos Jugador.
+ * @param {number} [umbral=300] - Puntuación mínima para ser considerado "pro" (por defecto 300).
+ * @returns {Object} Objeto con las claves 'pro' y 'rookie' conteniendo los arrays de jugadores.
+ */
+export function agruparPorNivel(jugadores, umbral = 300) {
+  return groupBy(jugadores, jugador => (jugador.puntos >= umbral ? 'pro' : 'rookie'));
+}
+
+/**
+ * Muestra el ranking final de jugadores por consola.
+ * Ordena la lista de mayor a menor puntuación antes de mostrarla.
+ *
+ * @param {Array&lt;Jugador>} jugadores - Lista de jugadores a mostrar.
+ */
+export function mostrarRanking(jugadores) {
+  // Crear copia y ordenar de mayor a menor
+  const ordenados = jugadores.slice().sort((a, b) => b.puntos - a.puntos);
+
+  console.log('🏆 RANKING FINAL 🏆');
+  for (const jugador of ordenados) {
+    console.log(jugador.mostrarJugador());
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Enemigo.html">Enemigo</a></li><li><a href="JefeFinal.html">JefeFinal</a></li><li><a href="Jugador.html">Jugador</a></li><li><a href="Producto.html">Producto</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EUR">EUR</a></li><li><a href="global.html#actualizarCestaVisual">actualizarCestaVisual</a></li><li><a href="global.html#agruparPorNivel">agruparPorNivel</a></li><li><a href="global.html#aplicarDescuentoPorRareza">aplicarDescuentoPorRareza</a></li><li><a href="global.html#batalla">batalla</a></li><li><a href="global.html#buscarProducto">buscarProducto</a></li><li><a href="global.html#cargarEscenaJugador">cargarEscenaJugador</a></li><li><a href="global.html#cargarJugadorEquipado">cargarJugadorEquipado</a></li><li><a href="global.html#cargarListaEnemigos">cargarListaEnemigos</a></li><li><a href="global.html#cargarMercado">cargarMercado</a></li><li><a href="global.html#cesta">cesta</a></li><li><a href="global.html#describirProducto">describirProducto</a></li><li><a href="global.html#enemigos">enemigos</a></li><li><a href="global.html#filtrarPorRareza">filtrarPorRareza</a></li><li><a href="global.html#finJuego">finJuego</a></li><li><a href="global.html#groupBy">groupBy</a></li><li><a href="global.html#indiceBatallaActual">indiceBatallaActual</a></li><li><a href="global.html#jugador">jugador</a></li><li><a href="global.html#mercado">mercado</a></li><li><a href="global.html#mostrarEscena">mostrarEscena</a></li><li><a href="global.html#mostrarRanking">mostrarRanking</a></li><li><a href="global.html#obtenerImagenProducto">obtenerImagenProducto</a></li><li><a href="global.html#prepararBatalla">prepararBatalla</a></li><li><a href="global.html#showScene">showScene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 03 2025 20:07:26 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

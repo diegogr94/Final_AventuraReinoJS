@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/producto.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/producto.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { EUR } from '../utils/utils.js';
+
+/**
+ * Clase que representa un objeto comprable en el mercado del juego.
+ * Gestiona los precios, rarezas y bonus de cada ítem (Armas, Armaduras o Consumibles).
+ * @class
+ */
+export class Producto {
+
+  /**
+   * Nombre identificativo del producto.
+   * @type {string}
+   */
+  nombre;
+
+  /**
+   * Precio base del producto en monedas.
+   * @type {number}
+   */
+  precio;
+
+  /**
+   * Categoría de rareza (ej: 'común', 'raro', 'épico').
+   * @type {string}
+   */
+  rareza;
+
+  /**
+   * Tipo de ítem (ej: 'arma', 'armadura', 'consumible').
+   * @type {string}
+   */
+  tipo;
+
+  /**
+   * Estadísticas extra que otorga el ítem (ataque, defensa o curación).
+   * @type {Object}
+   */
+  bonus;
+
+  /**
+   * Crea una nueva instancia de Producto.
+   * @param {string} nombre - Nombre del producto.
+   * @param {number} precio - Precio base del producto.
+   * @param {string} rareza - Nivel de rareza (por ejemplo: "común", "raro", "épico").
+   * @param {string} tipo - Tipo de producto (por ejemplo: "arma", "poción", "armadura").
+   * @param {Object} bonus - Objeto con los bonus del producto, por ejemplo { ataque: 5, defensa: 2 }.
+   */
+  constructor(nombre, precio, rareza, tipo, bonus) {
+    this.nombre = nombre;
+    this.precio = precio;
+    this.rareza = rareza;
+    this.tipo = tipo;
+    // Añadimos protección por si bonus viene vacío
+    this.bonus = bonus || {};
+  }
+
+  /**
+   * Devuelve una representación en texto del producto formateada.
+   * Incluye nombre, rareza, precio (formateado en EUR) y sus bonus.
+   * @returns {string} Descripción legible del producto.
+   */
+  mostrarProducto() {
+    // Convierte los bonus a un texto como "ataque+5, defensa+2"
+    let bonusTexto = '';
+    for (const clave in this.bonus) {
+      bonusTexto += `${clave}+${this.bonus[clave]}, `;
+    }
+    // Quita la última coma y espacio si hay texto
+    if (bonusTexto.length > 0) {
+        bonusTexto = bonusTexto.slice(0, -2);
+    }
+
+    return `${this.nombre} [${this.rareza}] (${this.tipo}) — ${EUR.format(this.precio)} — ${bonusTexto}`;
+  }
+
+  /**
+   * Crea una copia del producto con un precio reducido.
+   * Se usa para no modificar el precio del producto original en la base de datos del juego.
+   * @param {number} porcentaje - Porcentaje de descuento a aplicar (0–100).
+   * @returns {Producto} Una nueva instancia de Producto con el precio rebajado.
+   */
+  aplicarDescuento(porcentaje) {
+    // Limita el porcentaje entre 0 y 100 para evitar errores matemáticos
+    if (porcentaje &lt; 0) porcentaje = 0;
+    if (porcentaje > 100) porcentaje = 100;
+
+    // Calcula el nuevo precio redondeado
+    const nuevoPrecio = Math.round(this.precio * (1 - porcentaje / 100));
+
+    // Retorna una nueva instancia (Inmutabilidad)
+    return new Producto(this.nombre, nuevoPrecio, this.rareza, this.tipo, this.bonus);
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Enemigo.html">Enemigo</a></li><li><a href="JefeFinal.html">JefeFinal</a></li><li><a href="Jugador.html">Jugador</a></li><li><a href="Producto.html">Producto</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EUR">EUR</a></li><li><a href="global.html#actualizarCestaVisual">actualizarCestaVisual</a></li><li><a href="global.html#agruparPorNivel">agruparPorNivel</a></li><li><a href="global.html#aplicarDescuentoPorRareza">aplicarDescuentoPorRareza</a></li><li><a href="global.html#batalla">batalla</a></li><li><a href="global.html#buscarProducto">buscarProducto</a></li><li><a href="global.html#cargarEscenaJugador">cargarEscenaJugador</a></li><li><a href="global.html#cargarJugadorEquipado">cargarJugadorEquipado</a></li><li><a href="global.html#cargarListaEnemigos">cargarListaEnemigos</a></li><li><a href="global.html#cargarMercado">cargarMercado</a></li><li><a href="global.html#cesta">cesta</a></li><li><a href="global.html#describirProducto">describirProducto</a></li><li><a href="global.html#enemigos">enemigos</a></li><li><a href="global.html#filtrarPorRareza">filtrarPorRareza</a></li><li><a href="global.html#finJuego">finJuego</a></li><li><a href="global.html#groupBy">groupBy</a></li><li><a href="global.html#indiceBatallaActual">indiceBatallaActual</a></li><li><a href="global.html#jugador">jugador</a></li><li><a href="global.html#mercado">mercado</a></li><li><a href="global.html#mostrarEscena">mostrarEscena</a></li><li><a href="global.html#mostrarRanking">mostrarRanking</a></li><li><a href="global.html#obtenerImagenProducto">obtenerImagenProducto</a></li><li><a href="global.html#prepararBatalla">prepararBatalla</a></li><li><a href="global.html#showScene">showScene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 03 2025 20:07:26 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

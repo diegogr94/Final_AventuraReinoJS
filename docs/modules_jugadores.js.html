@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/jugadores.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/jugadores.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { groupBy } from '../utils/utils.js';
+
+/**
+ * Clase que representa al jugador principal del juego.
+ * Gestiona sus estadísticas vitales, su inventario de objetos y su puntuación acumulada.
+ * @class
+ */
+export class Jugador {
+  /**
+   * Nombre identificativo del jugador.
+   * @type {string}
+   */
+  nombre;
+
+  /**
+   * Puntuación actual acumulada en el juego.
+   * @type {number}
+   */
+  puntos;
+
+  /**
+   * Lista de objetos (armas, armaduras, pociones) que posee el jugador.
+   * @type {Array&lt;Object>}
+   */
+  inventario;
+
+  /**
+   * Puntos de vida máximos que puede tener el jugador.
+   * @type {number}
+   */
+  vidaMax;
+
+  /**
+   * Puntos de vida actuales del jugador.
+   * @type {number}
+   */
+  vida;
+
+  /**
+   * Crea una nueva instancia de Jugador.
+   * @param {string} nombre - Nombre del jugador.
+   */
+  constructor(nombre) {
+    this.nombre = nombre;
+    this.puntos = 0;
+    this.inventario = [];
+    this.vidaMax = 100;
+    this.vida = this.vidaMax;
+  }
+
+  /**
+   * Añade un objeto al inventario del jugador.
+   * Se utiliza `structuredClone` para crear una copia profunda y evitar referencias al objeto original del mercado.
+   * @param {Object} item - Objeto que se añadirá al inventario.
+   */
+  añadirItem(item) {
+    this.inventario.push(structuredClone(item));
+  }
+
+  /**
+   * Incrementa la puntuación del jugador tras una victoria.
+   * @param {number} cantidad - Cantidad de puntos a añadir.
+   */
+  ganarPuntos(cantidad) {
+    this.puntos += cantidad;
+  }
+
+  /**
+   * Calcula el ataque total sumando los bonus de tipo 'ataque' de todos los objetos del inventario.
+   * @returns {number} Puntos de ataque totales.
+   */
+  get ataqueTotal() {
+    return this.inventario.reduce((total, item) => total + (item.bonus.ataque || 0), 0);
+  }
+
+  /**
+   * Calcula la defensa total sumando los bonus de tipo 'defensa' de todos los objetos del inventario.
+   * @returns {number} Puntos de defensa totales.
+   */
+  get defensaTotal() {
+    return this.inventario.reduce((total, item) => total + (item.bonus.defensa || 0), 0);
+  }
+
+  /**
+   * Agrupa los ítems del inventario según su propiedad 'tipo' (ej: arma, armadura, poción).
+   * Utiliza la función auxiliar groupBy.
+   * @returns {Object} Un objeto con listas de objetos agrupados por tipo.
+   */
+  inventarioPorTipo() {
+    return groupBy(this.inventario, item => item.tipo);
+  }
+
+  /**
+   * Genera una representación en texto formateado del estado actual del jugador.
+   * @returns {string} Descripción detallada con estadísticas e inventario.
+   */
+  mostrarJugador() {
+    return `
+      👤 ${this.nombre}
+      ❤️ Vida: ${this.vida}/${this.vidaMax}
+      ⭐ Puntos: ${this.puntos}
+      ⚔️ Ataque total: ${this.ataqueTotal}
+      🛡️ Defensa total: ${this.defensaTotal}
+      🎒 Inventario: ${this.inventario.length > 0
+          ? this.inventario.map(item => item.nombre).join(', ')
+          : 'Vacío'}
+    `;
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Enemigo.html">Enemigo</a></li><li><a href="JefeFinal.html">JefeFinal</a></li><li><a href="Jugador.html">Jugador</a></li><li><a href="Producto.html">Producto</a></li></ul><h3>Global</h3><ul><li><a href="global.html#EUR">EUR</a></li><li><a href="global.html#actualizarCestaVisual">actualizarCestaVisual</a></li><li><a href="global.html#agruparPorNivel">agruparPorNivel</a></li><li><a href="global.html#aplicarDescuentoPorRareza">aplicarDescuentoPorRareza</a></li><li><a href="global.html#batalla">batalla</a></li><li><a href="global.html#buscarProducto">buscarProducto</a></li><li><a href="global.html#cargarEscenaJugador">cargarEscenaJugador</a></li><li><a href="global.html#cargarJugadorEquipado">cargarJugadorEquipado</a></li><li><a href="global.html#cargarListaEnemigos">cargarListaEnemigos</a></li><li><a href="global.html#cargarMercado">cargarMercado</a></li><li><a href="global.html#cesta">cesta</a></li><li><a href="global.html#describirProducto">describirProducto</a></li><li><a href="global.html#enemigos">enemigos</a></li><li><a href="global.html#filtrarPorRareza">filtrarPorRareza</a></li><li><a href="global.html#finJuego">finJuego</a></li><li><a href="global.html#groupBy">groupBy</a></li><li><a href="global.html#indiceBatallaActual">indiceBatallaActual</a></li><li><a href="global.html#jugador">jugador</a></li><li><a href="global.html#mercado">mercado</a></li><li><a href="global.html#mostrarEscena">mostrarEscena</a></li><li><a href="global.html#mostrarRanking">mostrarRanking</a></li><li><a href="global.html#obtenerImagenProducto">obtenerImagenProducto</a></li><li><a href="global.html#prepararBatalla">prepararBatalla</a></li><li><a href="global.html#showScene">showScene</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Dec 03 2025 20:07:26 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
