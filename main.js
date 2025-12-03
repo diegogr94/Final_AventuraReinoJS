@@ -327,6 +327,15 @@ function prepararBatalla() {
     const divEnemigo = document.getElementById('tarjeta-enemigo-batalla');
     const logBatalla = document.getElementById('registro-batalla');
     const btnSiguiente = document.getElementById('btn-siguiente-batalla');
+    
+    // Referencia al contenedor para la animación CSS
+    const contenedorArena = document.querySelector('.arena-batalla');
+
+    
+    // 1. Aseguramos la clase base
+    contenedorArena.classList.add('battle-arena');
+    // 2. Quitamos la clase de movimiento INMEDIATAMENTE para mandar las cartas fuera (Reset)
+    contenedorArena.classList.remove('start-anim');
 
     // Renderizado inicial de combatientes
     divJugador.innerHTML = `
@@ -335,6 +344,8 @@ function prepararBatalla() {
         <p>❤️ HP: ${jugador.vida}</p>
         <p>⚔️ ATK: ${jugador.ataqueTotal}</p>
     `;
+    // Asignamos la clase necesaria para que el CSS la mueva
+    divJugador.className = 'tarjeta-luchador lado-jugador';
 
     divEnemigo.innerHTML = `
         <img src="${enemigo.img}" alt="Enemigo">
@@ -343,11 +354,13 @@ function prepararBatalla() {
         <p>⚔️ ATK: ${enemigo.ataque}</p>
     `;
 
-    // Animación con GSAP
-    if (typeof gsap !== 'undefined') {
-        gsap.from(divJugador, { x: -300, opacity: 0, duration: 1, ease: "power2.out" });
-        gsap.from(divEnemigo, { x: 300, opacity: 0, duration: 1, ease: "power2.out" });
-    }
+    // Asignamos la clase necesaria para que el CSS la mueva
+    divEnemigo.className = 'tarjeta-luchador lado-enemigo';
+
+    // Esperamos un instante para que el navegador procese el "Reset" y luego lanzamos la animación
+    setTimeout(() => {
+        contenedorArena.classList.add('start-anim');
+    }, 50);
 
     // Estado inicial de la UI de batalla
     logBatalla.innerHTML = "⚔️ ¡Peleando!..."; 

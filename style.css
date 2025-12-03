@@ -168,6 +168,33 @@ img {
     border-radius: 5px;
 }
 
+/* ANIMACIÓN BATALLA */
+
+/* 1. ESTADO INICIAL (INVISIBLE): Las cartas empiezan fuera de la pantalla */
+.battle-arena .lado-jugador {
+    transform: translateX(-200%); /* Fuera a la izquierda */
+    opacity: 0;
+    transition: all 0.8s ease-out; /* Velocidad del viaje */
+}
+
+.battle-arena .lado-enemigo {
+    transform: translateX(200%); /* Fuera a la derecha */
+    opacity: 0;
+    transition: all 0.8s ease-out; /* Velocidad del viaje */
+}
+
+/* 2. ESTADO FINAL (VISIBLE): Cuando añadimos la clase .start-anim */
+.battle-arena.start-anim .lado-jugador {
+    transform: translateX(0); /* Vuelve a su sitio original */
+    opacity: 1;
+}
+
+.battle-arena.start-anim .lado-enemigo {
+    transform: translateX(0); /* Vuelve a su sitio original */
+    opacity: 1;
+}
+
+
 /* RESPONSIVE  */
 
 
