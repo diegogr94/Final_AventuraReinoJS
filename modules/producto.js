@@ -1,6 +1,41 @@
 import { EUR } from '../utils/utils.js';
 
+/**
+ * Clase que representa un objeto comprable en el mercado del juego.
+ * Gestiona los precios, rarezas y bonus de cada ítem (Armas, Armaduras o Consumibles).
+ * @class
+ */
 export class Producto {
+
+  /**
+   * Nombre identificativo del producto.
+   * @type {string}
+   */
+  nombre;
+
+  /**
+   * Precio base del producto en monedas.
+   * @type {number}
+   */
+  precio;
+
+  /**
+   * Categoría de rareza (ej: 'común', 'raro', 'épico').
+   * @type {string}
+   */
+  rareza;
+
+  /**
+   * Tipo de ítem (ej: 'arma', 'armadura', 'consumible').
+   * @type {string}
+   */
+  tipo;
+
+  /**
+   * Estadísticas extra que otorga el ítem (ataque, defensa o curación).
+   * @type {Object}
+   */
+  bonus;
 
   /**
    * Crea una nueva instancia de Producto.
@@ -15,12 +50,14 @@ export class Producto {
     this.precio = precio;
     this.rareza = rareza;
     this.tipo = tipo;
-    this.bonus = bonus;
+    // Añadimos protección por si bonus viene vacío
+    this.bonus = bonus || {};
   }
 
   /**
-   * Devuelve una representación en texto del producto.
-   * @returns {string} Descripción del producto.
+   * Devuelve una representación en texto del producto formateada.
+   * Incluye nombre, rareza, precio (formateado en EUR) y sus bonus.
+   * @returns {string} Descripción legible del producto.
    */
   mostrarProducto() {
     // Convierte los bonus a un texto como "ataque+5, defensa+2"
@@ -28,25 +65,29 @@ export class Producto {
     for (const clave in this.bonus) {
       bonusTexto += `${clave}+${this.bonus[clave]}, `;
     }
-    // Quita la última coma y espacio
-    bonusTexto = bonusTexto.slice(0, -2);
+    // Quita la última coma y espacio si hay texto
+    if (bonusTexto.length > 0) {
+        bonusTexto = bonusTexto.slice(0, -2);
+    }
 
     return `${this.nombre} [${this.rareza}] (${this.tipo}) — ${EUR.format(this.precio)} — ${bonusTexto}`;
   }
 
   /**
-   * Aplica un descuento al producto y devuelve una nueva instancia con el precio actualizado.
-   * @param {number} porcentaje - Porcentaje de descuento (0–100).
-   * @returns {Producto} Un nuevo producto con el precio reducido.
+   * Crea una copia del producto con un precio reducido.
+   * Se usa para no modificar el precio del producto original en la base de datos del juego.
+   * @param {number} porcentaje - Porcentaje de descuento a aplicar (0–100).
+   * @returns {Producto} Una nueva instancia de Producto con el precio rebajado.
    */
   aplicarDescuento(porcentaje) {
-    // Limita el porcentaje entre 0 y 100
+    // Limita el porcentaje entre 0 y 100 para evitar errores matemáticos
     if (porcentaje < 0) porcentaje = 0;
     if (porcentaje > 100) porcentaje = 100;
 
-    // Calcula el nuevo precio (Ejemplo: 200 * (1 - 0.25))
+    // Calcula el nuevo precio redondeado
     const nuevoPrecio = Math.round(this.precio * (1 - porcentaje / 100));
 
+    // Retorna una nueva instancia (Inmutabilidad)
     return new Producto(this.nombre, nuevoPrecio, this.rareza, this.tipo, this.bonus);
   }
 }
