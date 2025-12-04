@@ -102,6 +102,17 @@ function mostrarEscena(idEscena) {
  * Inicializa al jugador, crea los enemigos y carga la primera escena.
  */
 window.onload = () => {
+
+
+    const guardado = JSON.parse(localStorage.getItem('partida_guardada'));
+if(guardado) {
+   jugador.nombre = guardado.nombre;
+   jugador.puntos = guardado.puntos;
+   jugador.dinero = guardado.dinero; 
+}
+
+
+
     // Inicialización del Jugador
     jugador = new Jugador("Diego"); 
 
@@ -143,6 +154,7 @@ function cargarEscenaJugador() {
         <p>⚔️ Ataque Base: 0</p>
         <p>🛡️ Defensa Base: 0</p>
         <p>💰 Puntos: ${jugador.puntos}</p>
+        <p>💰 Dinero: ${jugador.dinero} monedas</p>
     `;
 
     // Configurar botón para avanzar
@@ -159,9 +171,10 @@ function cargarEscenaJugador() {
  * Aplica descuentos aleatorios a una rareza aleatoria y gestiona la cesta de la compra.
  */
 function cargarMercado() {
+    
     mostrarEscena('escena-mercado');
     
-    // 1. Lógica de Descuento Aleatorio
+    
     const rarezasPosibles = ['común', 'raro', 'épico'];
     const rarezaElegida = rarezasPosibles[Math.floor(Math.random() * rarezasPosibles.length)];
     
@@ -185,6 +198,7 @@ function cargarMercado() {
         }
 
         const imagen = obtenerImagenProducto(producto.nombre);
+        document.querySelector('.subtitulo').innerText = `TU DINERO ACTUAL ES: ${jugador.dinero} monedas`;
 
         div.innerHTML = `
             <img src="${imagen}">
@@ -200,11 +214,13 @@ function cargarMercado() {
                 cesta = cesta.filter(p => p !== producto);
                 div.classList.remove('seleccionado');
                 div.querySelector('button').innerText = "Añadir";
+                
             } else {
                 // Añadir producto
                 cesta.push(producto);
                 div.classList.add('seleccionado');
                 div.querySelector('button').innerText = "Retirar";
+                
             }
             actualizarCestaVisual();
         };
@@ -214,10 +230,30 @@ function cargarMercado() {
 
     actualizarCestaVisual();
 
-    // 3. Confirmar Compra
+    
     document.getElementById('btn-comprar').onclick = () => {
-        cesta.forEach(item => jugador.añadirItem(item));
-        cargarJugadorEquipado();
+      
+        let costeTotal = 0;
+        cesta.forEach(producto => {
+            costeTotal += producto.precio;
+        });
+
+        
+        if (jugador.dinero >= costeTotal) {
+            
+            jugador.gastarDinero(costeTotal); 
+            
+            cesta.forEach(item => jugador.añadirItem(item));
+            
+            alert(`Compra realizada. Te quedan ${jugador.dinero} monedas.`);
+            cargarJugadorEquipado();
+
+        } else {
+            
+            alert(`¡No tienes suficiente dinero!
+            Cuesta: ${costeTotal} monedas
+            Tienes: ${jugador.dinero} monedas`);
+        }
     };
 }
 
@@ -263,6 +299,7 @@ function cargarJugadorEquipado() {
         <p>⚔️ Ataque Total: ${jugador.ataqueTotal}</p>
         <p>🛡️ Defensa Total: ${jugador.defensaTotal}</p>
         <p>🎒 Items en mochila: ${jugador.inventario.length}</p>
+        <p>💰 Dinero: ${jugador.dinero} monedas</p>
         
         <div style="margin-top:10px; padding:5px; background:#f0f0f0;">
             <p><strong>Inventario:</strong></p>
@@ -356,7 +393,7 @@ function prepararBatalla() {
         <p>⚔️ ATK: ${enemigo.ataque}</p>
     `;
 
-    // Asignamos la clase necesaria para que el CSS la mueva
+    
     divEnemigo.className = 'tarjeta-luchador lado-enemigo';
 
     // Esperamos un instante para que el navegador procese el "Reset" y luego lanzamos la animación
@@ -427,9 +464,20 @@ function prepararBatalla() {
  * Lanza efectos de celebración si el jugador ganó.
  */
 function finJuego() {
+
+    function guardarProgreso() {
+    const datosGuardar = {
+        nombre: jugador.nombre,
+        vida: jugador.vida,
+        puntos: jugador.puntos
+    };
+    localStorage.setItem('partida_guardada', JSON.stringify(datosGuardar));
+    alert("Partida Guardada");
+}
+
     mostrarEscena('escena-final');
     const container = document.getElementById('contenido-final');
-    
+  
     // Determinar rango (Veterano/Novato)
     const esPro = jugador.puntos > 300; 
 
@@ -445,3 +493,6 @@ function finJuego() {
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 }
+
+
+

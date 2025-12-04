@@ -46,6 +46,7 @@ export class Jugador {
     this.inventario = [];
     this.vidaMax = 100;
     this.vida = this.vidaMax;
+    this.dinero = 500;
   }
 
   /**
@@ -57,6 +58,10 @@ export class Jugador {
     this.inventario.push(structuredClone(item));
   }
 
+  gastarDinero(cantidad) {
+       this.dinero -= cantidad;
+   }
+
   /**
    * Incrementa la puntuación del jugador tras una victoria.
    * @param {number} cantidad - Cantidad de puntos a añadir.
@@ -64,6 +69,11 @@ export class Jugador {
   ganarPuntos(cantidad) {
     this.puntos += cantidad;
   }
+
+  ganarDinero(cantidad){
+    this.dinero += cantidad;
+  }
+
 
   /**
    * Calcula el ataque total sumando los bonus de tipo 'ataque' de todos los objetos del inventario.
