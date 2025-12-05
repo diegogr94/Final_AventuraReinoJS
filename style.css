@@ -212,3 +212,24 @@ img {
     flex-wrap: wrap; /* Permite que los items bajen si no caben en móvil */
     justify-content: center;
 }
+
+
+
+
+#move-container{
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  animation:
+    move 5s linear;
+}
+
+@keyframes move {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100px);
+  
+  }
+}

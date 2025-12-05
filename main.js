@@ -143,6 +143,7 @@ if(guardado) {
  * Muestra nombre, vida, estadísticas base y puntos.
  */
 function cargarEscenaJugador() {
+
     mostrarEscena('escena-jugador');
     const container = document.getElementById('tarjeta-jugador-inicial');
     
